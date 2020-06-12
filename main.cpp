@@ -83,6 +83,7 @@ pair<double, double> min_max(const unsigned char* mas, int sz) {
             minn = double(mas[i]);
         }
     }
+    cout << minn << ' ' << 255. / double(maxx - minn);
     return {minn, maxx};
 }
 
@@ -164,7 +165,7 @@ int main(int argc, char * argv[]) {
             free(arr_pixels);
             return 1;
         }
-        if (fread(arr_pixels, sizeof(unsigned char), widht * height, input_file) != 3 * widht * height){
+        if (fread(arr_pixels, sizeof(unsigned char),  3 * widht * height, input_file) != 3 * widht * height){
             cerr << "incorrect size of data in input file \n"; //некоректный размер массива данных
             fclose(input_file);
             free(arr_pixels);
