@@ -3,6 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
+
 using namespace std;
 
 int a, widht, height, gamma;
@@ -31,9 +32,9 @@ void convert_back_to_rgb(unsigned char* pix) {
     int ind_cb = 1;
     int ind_cr = 2;
     while (ind_y < 3 * widht * height) {
-        double r = double(pix[ind_y]) +  1.402  * (pix[ind_cr] - 128);
+        double r = double(pix[ind_y]) +  1.402  * (pix[ind_cr] - 128.);
         double g = double(pix[ind_y]) -  0.34414 * double(pix[ind_cb] - 128.) - 0.71414  * double(pix[ind_cr] - 128.);
-        double b = double(pix[ind_y]) +  1.772 * double(pix[ind_cb]);
+        double b = double(pix[ind_y]) +  1.772 * double(pix[ind_cb] - 128.);
         pix[ind_y] = (unsigned char)(round(r));
         pix[ind_cb] = (unsigned char)(round(g));
         pix[ind_cr] = (unsigned char)(round(b));
