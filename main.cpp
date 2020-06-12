@@ -43,9 +43,7 @@ void action (int offset, double multiplier, int number_action, unsigned char* ar
     if (a == 5) {
         for (int i = 0; i < widht * height; ++i) {
             double y = multiplier * (arr_pixels[i] - offset);
-            if (y < 0) { y = 0;}
-            if (y > 255) {y = 255;}
-            arr_pixels[i] = (unsigned char) y;
+            arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
         }
     } else {
         if (number_action == 1) {
@@ -53,9 +51,7 @@ void action (int offset, double multiplier, int number_action, unsigned char* ar
         }
         for (int i = 0; i < 3 * widht * height; ++i) {
             double y = multiplier * (arr_pixels[i] - offset);
-            if (y < 0) { y = 0;}
-            if (y > 255) {y = 255;}
-            arr_pixels[i] = (unsigned char) y;
+            arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
         }
         if (number_action == 1) {
             convert_back_to_rgb(arr_pixels);
@@ -83,9 +79,7 @@ void action_1 (int number_action, unsigned char* arr_pixels) {
         if (number_action == 2 || number_action == 3) {
             for (int i = 0; i < widht * height; ++i) {
                 double y = (arr_pixels[i] - min_max5.first) * 255 / (min_max5.second - min_max5.first);
-                if (y < 0) { y = 0;}
-                if (y > 255) {y = 255;}
-                arr_pixels[i] = (unsigned char) y;
+                arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
             }
         }
     } else { // a = 6
@@ -95,9 +89,7 @@ void action_1 (int number_action, unsigned char* arr_pixels) {
         auto min_max6 = min_max(arr_pixels, 3 * widht * height);
         for (int i = 0; i < 3 * widht * height; ++i) {
             double y = (arr_pixels[i] - min_max6.first) * 255 / (min_max6.second - min_max6.first);
-            if (y < 0) { y = 0;}
-            if (y > 255) {y = 255;}
-            arr_pixels[i] = (unsigned char) y;
+            arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
         }
         if (number_action == 3) {
             convert_back_to_rgb(arr_pixels);
