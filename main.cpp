@@ -16,14 +16,10 @@ void convert_to_y(unsigned char* pix){
         double y = 0.299 * double(pix[ind_r]) + 0.587 * double(pix[ind_g]) + 0.114 * double(pix[ind_b]);
         double cb = 128. - 0.168736 * double(pix[ind_r]) - 0.331264 * double(pix[ind_g]) + 0.5 * double(pix[ind_b]);
         double cr = 128. + 0.5 * double(pix[ind_r]) - 0.418688 * double(pix[ind_g]) - 0.081312 * double(pix[ind_b]);
-        pix[ind_r] = (unsigned char)(round(y));
-        pix[ind_g] = (unsigned char)(round(cb));
-        pix[ind_b] = (unsigned char)(round(cr));
+        pix[ind_r] = (unsigned char)(min(max(round(y), 0.), 255.));
+        pix[ind_g] = (unsigned char)(min(max(round(cb), 0.), 255.));
+        pix[ind_b] = (unsigned char)(min(max(round(cr), 0.), 255.));
         ind_r += 3; ind_g += 3; ind_b += 3;
-    }
-    for (int i = 0; i < 3 * widht * height; ++i) {
-        if (pix[i] < 0) { pix[i] = 0;}
-        if (pix[i] > 255) { pix[i] = 255; }
     }
 }
 
@@ -35,26 +31,21 @@ void convert_back_to_rgb(unsigned char* pix) {
         double r = double(pix[ind_y]) +  1.402  * (pix[ind_cr] - 128.);
         double g = double(pix[ind_y]) -  0.34414 * double(pix[ind_cb] - 128.) - 0.71414  * double(pix[ind_cr] - 128.);
         double b = double(pix[ind_y]) +  1.772 * double(pix[ind_cb] - 128.);
-        pix[ind_y] = (unsigned char)(round(r));
-        pix[ind_cb] = (unsigned char)(round(g));
-        pix[ind_cr] = (unsigned char)(round(b));
+        pix[ind_y] = (unsigned char)(min(max(round(r), 0.), 255.));
+        pix[ind_cb] = (unsigned char)(min(max(round(g), 0.), 255.));
+        pix[ind_cr] = (unsigned char)(min(max(round(b), 0.), 255.));
         ind_y += 3; ind_cb += 3; ind_cr += 3;
     }
-    for (int i = 0; i < 3 * widht * height; ++i) {
-        if (pix[i] < 0) { pix[i] = 0;}
-        if (pix[i] > 255) {pix[i] = 255;}
-    }
+
 }
 
 void action (int offset, double multiplier, int number_action, unsigned char* arr_pixels) {
     if (a == 5) {
         for (int i = 0; i < widht * height; ++i) {
             double y = multiplier * (arr_pixels[i] - offset);
+            if (y < 0) { y = 0;}
+            if (y > 255) {y = 255;}
             arr_pixels[i] = (unsigned char) y;
-        }
-        for (int i = 0; i < widht * height; ++i) {
-            if (arr_pixels[i] < 0) { arr_pixels[i] = 0;}
-            if (arr_pixels[i] > 255) {arr_pixels[i] = 255;}
         }
     } else {
         if (number_action == 1) {
@@ -62,11 +53,9 @@ void action (int offset, double multiplier, int number_action, unsigned char* ar
         }
         for (int i = 0; i < 3 * widht * height; ++i) {
             double y = multiplier * (arr_pixels[i] - offset);
+            if (y < 0) { y = 0;}
+            if (y > 255) {y = 255;}
             arr_pixels[i] = (unsigned char) y;
-        }
-        for (int i = 0; i < 3 * widht * height; ++i) {
-            if (arr_pixels[i] < 0) { arr_pixels[i] = 0; }
-            if (arr_pixels[i] > 255) { arr_pixels[i] = 255; }
         }
         if (number_action == 1) {
             convert_back_to_rgb(arr_pixels);
@@ -94,11 +83,9 @@ void action_1 (int number_action, unsigned char* arr_pixels) {
         if (number_action == 2 || number_action == 3) {
             for (int i = 0; i < widht * height; ++i) {
                 double y = (arr_pixels[i] - min_max5.first) * 255 / (min_max5.second - min_max5.first);
+                if (y < 0) { y = 0;}
+                if (y > 255) {y = 255;}
                 arr_pixels[i] = (unsigned char) y;
-            }
-            for (int i = 0; i < widht * height; ++i) {
-                if (arr_pixels[i] < 0) { arr_pixels[i] = 0;}
-                if (arr_pixels[i] > 255) {arr_pixels[i] = 255;}
             }
         }
     } else { // a = 6
@@ -108,11 +95,9 @@ void action_1 (int number_action, unsigned char* arr_pixels) {
         auto min_max6 = min_max(arr_pixels, 3 * widht * height);
         for (int i = 0; i < 3 * widht * height; ++i) {
             double y = (arr_pixels[i] - min_max6.first) * 255 / (min_max6.second - min_max6.first);
+            if (y < 0) { y = 0;}
+            if (y > 255) {y = 255;}
             arr_pixels[i] = (unsigned char) y;
-        }
-        for (int i = 0; i < 3 * widht * height; ++i) {
-            if (arr_pixels[i] < 0) { arr_pixels[i] = 0;}
-            if (arr_pixels[i] > 255) {arr_pixels[i] = 255;}
         }
         if (number_action == 3) {
             convert_back_to_rgb(arr_pixels);
