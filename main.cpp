@@ -46,14 +46,18 @@ void action (int offset, double multiplier, int number_action, unsigned char* ar
             arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
         }
     } else {
+        if (number_action == 0) {
+            for (int i = 0; i < 3 * widht * height; ++i) {
+                double y = multiplier * (arr_pixels[i] - offset);
+                arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
+            }
+        }
         if (number_action == 1) {
             convert_to_y(arr_pixels);
-        }
-        for (int i = 0; i < 3 * widht * height; ++i) {
-            double y = multiplier * (arr_pixels[i] - offset);
-            arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
-        }
-        if (number_action == 1) {
+            for (int i = 0; i < 3 * widht * height; i += 3) {
+                double y = multiplier * (arr_pixels[i] - offset);
+                arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
+            }
             convert_back_to_rgb(arr_pixels);
         }
     }
@@ -83,15 +87,21 @@ void action_1 (int number_action, unsigned char* arr_pixels) {
             }
         }
     } else { // a = 6
+        if (number_action == 2) {
+            auto min_max6 = min_max(arr_pixels, 3 * widht * height);
+            for (int i = 0; i < 3 * widht * height; ++i) {
+                double y = (arr_pixels[i] - min_max6.first) * 255 / (min_max6.second - min_max6.first);
+                arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
+            }
+        }
+
         if (number_action == 3) {
             convert_to_y(arr_pixels);
-        }
-        auto min_max6 = min_max(arr_pixels, 3 * widht * height);
-        for (int i = 0; i < 3 * widht * height; ++i) {
-            double y = (arr_pixels[i] - min_max6.first) * 255 / (min_max6.second - min_max6.first);
-            arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
-        }
-        if (number_action == 3) {
+            auto min_max6 = min_max(arr_pixels, 3 * widht * height);
+            for (int i = 0; i < 3 * widht * height; i += 3) {
+                double y = (arr_pixels[i] - min_max6.first) * 255 / (min_max6.second - min_max6.first);
+                arr_pixels[i] = (unsigned char) min(max(y, 0.), 255.);
+            }
             convert_back_to_rgb(arr_pixels);
         }
     }
